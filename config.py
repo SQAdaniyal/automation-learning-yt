@@ -12,8 +12,8 @@ YT_REFRESH_TOKEN = os.environ.get("YT_REFRESH_TOKEN", "")
 
 # ---------- CONTENT ----------
 NICHE = "AI tools and breakthroughs, future technology shock facts, AI vs human comparisons, mind-bending tech statistics, what AI can do now that seems impossible, future predictions backed by real trends"
-LONG_VIDEOS_PER_DAY = 3
-SHORTS_PER_DAY = 3
+LONG_VIDEOS_PER_DAY = 1
+SHORTS_PER_DAY = 5
 
 # ---------- LANGUAGES ----------
 LANGUAGES = {
