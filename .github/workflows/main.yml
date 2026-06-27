@@ -2,7 +2,7 @@ name: Daily ScareWire Videos
 
 on:
   schedule:
-    - cron: "30 8 * * *"
+    - cron: "30 16 * * *"
   workflow_dispatch: {}
 
 permissions:
