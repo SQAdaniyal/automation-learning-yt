@@ -1,5 +1,5 @@
 """
-YouTube upload + auto-comment — NeuralEdge (Urdu + English mix).
+YouTube upload + auto-comment — ScareWire (Urdu + English mix).
 """
 import os
 import random
@@ -34,6 +34,42 @@ def _youtube():
         client_secret=config.YT_CLIENT_SECRET,
     )
     return build("youtube", "v3", credentials=creds)
+
+
+def get_channel_identity_and_recent_uploads() -> tuple[str, list[dict]]:
+    """Return the authorized channel and its latest uploads for recovery checks."""
+    yt = _youtube()
+    response = yt.channels().list(
+        part="snippet,contentDetails", mine=True
+    ).execute(num_retries=5)
+    channels = response.get("items", [])
+    if not channels:
+        raise RuntimeError("YouTube OAuth did not return an authorized channel")
+    channel = channels[0]
+    channel_title = channel.get("snippet", {}).get("title", "")
+    playlist_id = (
+        channel.get("contentDetails", {})
+        .get("relatedPlaylists", {})
+        .get("uploads")
+    )
+    if not playlist_id:
+        raise RuntimeError("Could not find the channel uploads playlist")
+    playlist = yt.playlistItems().list(
+        part="snippet", playlistId=playlist_id, maxResults=50
+    ).execute(num_retries=5)
+    uploads = []
+    for item in playlist.get("items", []):
+        snippet = item.get("snippet", {})
+        title = snippet.get("title", "")
+        video_id = snippet.get("resourceId", {}).get("videoId")
+        if title and video_id:
+            uploads.append({
+                "video_id": video_id,
+                "title": title,
+                "uploaded_at": snippet.get("publishedAt"),
+                "kind": "short" if "#shorts" in title.lower() else "long",
+            })
+    return channel_title, uploads
 
 
 def _upload_thumbnail(yt, video_id: str, thumb_path: str):
@@ -88,7 +124,7 @@ def upload_video(path: str, title: str, description: str,
     request = yt.videos().insert(part="snippet,status", body=body, media_body=media)
     response = None
     while response is None:
-        status, response = request.next_chunk()
+        status, response = request.next_chunk(num_retries=5)
         if status:
             print(f"  Upload: {int(status.progress() * 100)}%")
     video_id = response["id"]

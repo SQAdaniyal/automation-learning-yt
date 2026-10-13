@@ -1,6 +1,4 @@
-"""
-NeuralEdge settings — AI/Tech facts (English only).
-"""
+"""ScareWire settings — unsettling but factual AI and technology stories."""
 import os
 
 # ---------- API KEYS ----------
@@ -11,7 +9,7 @@ YT_CLIENT_SECRET = os.environ.get("YT_CLIENT_SECRET", "")
 YT_REFRESH_TOKEN = os.environ.get("YT_REFRESH_TOKEN", "")
 
 # ---------- CONTENT ----------
-NICHE = "AI tools and breakthroughs, future technology shock facts, AI vs human comparisons, mind-bending tech statistics, what AI can do now that seems impossible, future predictions backed by real trends"
+NICHE = "unsettling, verifiable AI and technology stories: deepfakes, voice cloning, privacy, surveillance, real AI risks, and surprising breakthroughs; no invented claims or fear bait"
 LONG_VIDEOS_PER_DAY = 1
 SHORTS_PER_DAY = 5
 
@@ -31,6 +29,7 @@ FPS = 24
 UPLOAD_TO_YOUTUBE = True
 PRIVACY_STATUS = "public"
 CATEGORY_ID = "28"
+CHANNEL_NAME = "ScareWire"
 
 # ---------- MODELS ----------
 GEMINI_MODEL = "gemini-2.5-flash"
@@ -42,3 +41,4 @@ GEMINI_URL = (
 # ---------- PATHS ----------
 WORK_DIR = "output"
 USED_TOPICS_FILE = "used_topics.json"
+VIDEO_HISTORY_FILE = "video_history.json"

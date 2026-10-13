@@ -2,11 +2,19 @@ name: Daily ScareWire Videos
 
 on:
   schedule:
-    - cron: "30 16 * * *"
+    # 9:17 AM Pakistan time; keep the daily run away from the top of the hour.
+    - cron: "17 4 * * *"
+    # Recovery passes at 3:17 PM and 9:17 PM Pakistan time.
+    - cron: "17 10 * * *"
+    - cron: "17 16 * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
+
+concurrency:
+  group: scarewire-daily-publishing
+  cancel-in-progress: false
 
 jobs:
   make-videos:
@@ -28,12 +36,48 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: python main.py
+        run: python -u main.py 2>&1 | tee run.log
+        shell: bash
+
+      - name: Preserve logs and rendered videos for recovery
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: scarewire-run-${{ github.run_id }}
+          path: |
+            run.log
+            output/**/final.mp4
+            output/**/thumb.jpg
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Save topics
         if: always()
         run: |
           git config user.name "scarewire-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add used_topics.json || true
-          git commit -m "Update used topics [skip ci]" || true
-          git push || true
+          git add -f used_topics.json video_history.json
+          if git diff --cached --quiet; then
+            echo "No ScareWire history changes to save."
+            exit 0
+          fi
+          git commit -m "Save ScareWire upload history [skip ci]"
+          for attempt in 1 2 3; do
+            if ! git fetch origin "+refs/heads/$GITHUB_REF_NAME:refs/remotes/origin/$GITHUB_REF_NAME"; then
+              echo "ScareWire history fetch attempt $attempt failed; retrying."
+              sleep 2
+              continue
+            fi
+            if ! git rebase "origin/$GITHUB_REF_NAME"; then
+              git rebase --abort
+              echo "Could not rebase ScareWire history."
+              exit 1
+            fi
+            if git push origin "HEAD:$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+            echo "ScareWire history push attempt $attempt failed; retrying."
+            sleep 2
+          done
+          echo "Could not save ScareWire upload history after 3 attempts."
+          exit 1

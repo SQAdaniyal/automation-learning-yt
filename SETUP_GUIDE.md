@@ -1,13 +1,13 @@
 # YouTube Faceless Channel — Full Automation (Rs. 0/month)
 
-Roz **3 videos + 3 shorts** (Urdu facts) khud ban kar upload hongi. Setup sirf **ek baar** karna hai (30–45 min), phir sab automatic.
+Roz **1 long video + 5 Shorts** (AI aur technology stories) khud ban kar upload hongi. Setup sirf **ek baar** karna hai (30–45 min), phir sab automatic.
 
 ---
 
 ## System kaise kaam karta hai
 
 ```
-GitHub Actions (roz 9:30 AM PKT par chalta hai)
+GitHub Actions roz 9:17 AM, 3:17 PM aur 9:17 PM PKT par recovery checks chalata hai
    │
    ├─ 1. Gemini API ........... topics + Urdu scripts likhta hai
    ├─ 2. edge-tts ............. Urdu voiceover banata hai (free, no key)
@@ -66,7 +66,7 @@ GitHub Actions (roz 9:30 AM PKT par chalta hai)
      (public repos par minutes unlimited free hain).
 3. Is poore folder ki files repo mein upload karein
    (GitHub par "uploading an existing file" se drag & drop bhi ho jata hai —
-   `.github/workflows/daily.yml` ka folder path same rehna zaroori hai)
+   `.github/workflows/main.yml` ka folder path same rehna zaroori hai)
 4. Repo mein: **Settings → Secrets and variables → Actions → New repository secret**
    Yeh **5 secrets** banayein:
 
@@ -80,12 +80,12 @@ GitHub Actions (roz 9:30 AM PKT par chalta hai)
 
 ## STEP 5 — Pehla test run
 
-1. Repo mein **Actions** tab → "Daily YouTube Videos" → **Run workflow**
-2. Logs mein progress dekhein. 40–60 min mein 6 videos upload ho jani chahiye.
+1. Repo mein **Actions** tab → "Daily ScareWire Videos" → **Run workflow**
+2. Logs mein progress dekhein. 40–60 min mein 1 long video + 5 Shorts ka target hai; recovery runs sirf baqi uploads banati hain.
 3. Pehli dafa `config.py` mein `PRIVACY_STATUS = "private"` rakh kar test karein,
    videos check karein, phir `"public"` kar dein.
 
-Bas. Ab roz 9:30 AM par sab khud hoga. ✅
+Bas. Roz 9:17 AM, 3:17 PM aur 9:17 PM PKT par recovery checks chalte hain. ✅
 
 ---
 
@@ -97,12 +97,12 @@ Bas. Ab roz 9:30 AM par sab khud hoga. ✅
 | `NICHE` | Topics ka subject change karein |
 | `LONG_VIDEOS_PER_DAY` / `SHORTS_PER_DAY` | Videos ki tadaad |
 | `PRIVACY_STATUS` | `private` / `public` |
-| Upload time | `.github/workflows/daily.yml` mein cron (UTC mein hota hai; PKT − 5) |
+| Upload time | `.github/workflows/main.yml` mein cron (UTC mein hota hai; PKT − 5) |
 
 ## Important baatein (zaroor parhein)
 
-- **YouTube quota:** Free quota 10,000 units/din hai; har upload ~1,600 units leta hai.
-  6 uploads = 9,600 units — bilkul limit par. Isi liye 6 se zyada na karein.
+- **YouTube quota:** Default quota allows 100 videos.insert calls per day; all other API methods share a 10,000-unit daily budget.
+  Thumbnail and comment requests use the shared budget too; check Google Cloud Console for your project quota.
 - **Monetization warning:** YouTube "mass-produced / repetitious" content ko
   monetization se reject kar sakta hai. Bachne ke liye: thumbnails custom banayein,
   kabhi kabhi scripts edit karein, aur quality par nazar rakhein. Yeh system content

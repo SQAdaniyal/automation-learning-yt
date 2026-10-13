@@ -1,5 +1,5 @@
 """
-EK BAAR chalayein NeuralEdge ke YouTube refresh token ke liye.
+EK BAAR chalayein ScareWire ke YouTube refresh token ke liye.
 """
 from google_auth_oauthlib.flow import InstalledAppFlow
 
