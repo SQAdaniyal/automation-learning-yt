@@ -10,7 +10,7 @@ Roz **1 long video + 5 Shorts** (AI aur technology stories) khud ban kar upload 
 GitHub Actions roz 9:17 AM, 3:17 PM aur 9:17 PM PKT par recovery checks chalata hai
    │
    ├─ 1. Gemini API ........... topics + Urdu scripts likhta hai
-   ├─ 2. edge-tts ............. Urdu voiceover banata hai (free, no key)
+   ├─ 2. Edge TTS ............. voiceover; local eSpeak NG fallback for outages
    ├─ 3. Pexels API ........... stock footage download karta hai
    ├─ 4. FFmpeg/MoviePy ....... final video render karta hai
    └─ 5. YouTube API .......... channel par upload karta hai
