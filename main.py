@@ -195,11 +195,18 @@ def main():
         long_count = config.LONG_VIDEOS_PER_DAY
         short_count = config.SHORTS_PER_DAY
 
+    research = []
+    try:
+        with open(config.RESEARCH_NOTES_FILE, encoding="utf-8") as f:
+            research = json.load(f)
+        print(f"YouTube research notes loaded: {len(research)} video(s).")
+    except (OSError, json.JSONDecodeError):
+        pass
     print("Aaj ke topics generate ho rahe hain...")
     long_topics = script_gen.generate_topics(
-        long_count, "long", used) if long_count else []
+        long_count, "long", used, research=research) if long_count else []
     short_topics = script_gen.generate_topics(
-        short_count, "short", used) if short_count else []
+        short_count, "short", used, research=research) if short_count else []
     print("Long :", long_topics)
     print("Short:", short_topics)
     missing_topics = max(long_count - len(long_topics), 0) + max(

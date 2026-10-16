@@ -78,7 +78,7 @@ def _parse_json(text: str):
     raise ValueError("No valid JSON: " + text[:120])
 
 
-def generate_topics(count: int, kind: str, used: list) -> list:
+def generate_topics(count: int, kind: str, used: list, research: list = None) -> list:
     style = (
         "3-4 minute AI/tech facts video"
         if kind == "long"
@@ -100,6 +100,8 @@ RULES:
 - AVOID these already-used topics: {json.dumps(used[-150:], ensure_ascii=False)}
 - For Shorts: ONE singular shocking fact, not a list
 - Must be understandable to a general (non-technical) audience
+- Optional reference-video patterns and new angles (inspiration only, not evidence): {json.dumps(research or [], ensure_ascii=False)[:8000]}
+- Independently verify factual claims; avoid fear bait and never copy source wording, title, or premise.
 
 Respond ONLY with a JSON array of strings. No other text."""
     return _parse_json(_ask_gemini(prompt))[:count]

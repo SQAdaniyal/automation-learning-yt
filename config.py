@@ -15,7 +15,11 @@ SHORTS_PER_DAY = 5
 
 # ---------- LANGUAGES ----------
 LANGUAGES = {
-    "English": {"voice": "en-US-ChristopherNeural", "rate": "+15%", "code": "en"},
+    "English": {
+        "voice": "en-US-ChristopherNeural", "rate": "+0%", "code": "en",
+        "gemini_voice": "Gacrux",
+        "tts_style": "Grounded documentary narration with subtle suspense, calm pacing, and no theatrical fear.",
+    },
 }
 
 # ---------- VIDEO ----------
@@ -42,3 +46,4 @@ GEMINI_URL = (
 WORK_DIR = "output"
 USED_TOPICS_FILE = "used_topics.json"
 VIDEO_HISTORY_FILE = "video_history.json"
+RESEARCH_NOTES_FILE = "research_notes.json"
